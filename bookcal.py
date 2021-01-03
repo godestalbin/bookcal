@@ -21,11 +21,11 @@ def index():
     bookedDays = []
     for booking in mongo.get({'roomName': 'Elodie'}):
         bookedDays += [[booking['startDate'].strftime('%Y-%m-%d'),booking['endDate'].strftime('%Y-%m-%d')]]
-        print(booking['startDate'], booking['endDate'])
+        # print(booking['startDate'], booking['endDate'])
         # [['2021-01-10', '2021-01-20']]
-    print(bookedDays)
+    # print(bookedDays)
     form = BookingForm()
-    print(form.startDate, form.endDate, form.name, form.mail, form.mail)
+    print(form.startDate, form.endDate, form.name, form.mail, form.phone)
     if form.validate_on_submit():
         print('Form validated')
         flaskapp.logger.debug('this is a DEBUG message')
@@ -45,6 +45,18 @@ def index():
             'customerMail': form.mail.data,
             'customerPhone': form.phone.data
         })
+    else:
+        for error in form.startDate.errors:
+            print('startdate Error', error)
+        for error in form.endDate.errors:
+            print('enddate Error', error)
+        for error in form.name.errors:
+            print('name Error', error)
+        for error in form.mail.errors:
+            print('mail Error', error)
+        for error in form.phone.errors:
+            print('phone Error', error)
+
     return render_template('index.html', form=form, bookedDays=bookedDays)
 
 @flaskapp.route('/test', methods=['GET', 'POST'])
