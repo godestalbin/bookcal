@@ -11,6 +11,9 @@ flaskapp = Flask(__name__)
 flaskapp.config.from_object(Config)
 mongo = MongoDb(flaskapp.config['MONGO_DB'], flaskapp.config['DATABASE'], flaskapp.config['COLLECTION'])
 
+gunicorn_logger = logging.getLogger('gunicorn.error')
+flaskapp.logger.handlers = gunicorn_logger.handlers
+
 @flaskapp.route('/', methods=['GET', 'POST'])
 def index():
     bookedDays = []
