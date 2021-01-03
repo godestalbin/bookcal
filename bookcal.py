@@ -18,10 +18,13 @@ def index():
         # [['2021-01-10', '2021-01-20']]
     print(bookedDays)
     form = BookingForm()
+    print(form.startDate, form.endDate, form.name, form.mail, form.mail)
     if form.validate_on_submit():
+        print('Form validated')
         # flash('Got booking for user name={}, mail={}, startDate={}, endDate={}'.format(
         #     form.name.data, form.mail.data, form.startDate.data, form.endDate.data))
         # Register this booking in database
+        print(datetime.strptime(form.startDate.data, '%Y-%m-%d'), datetime.strptime(form.endDate.data, '%Y-%m-%d'))
         mongo.add({
             'roomName': 'Elodie',
             'startDate': datetime.strptime(form.startDate.data, '%Y-%m-%d'), # datetime(form.startDate.data),
