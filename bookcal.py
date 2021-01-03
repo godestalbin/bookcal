@@ -23,11 +23,11 @@ def index():
     print(form.startDate, form.endDate, form.name, form.mail, form.mail)
     if form.validate_on_submit():
         print('Form validated')
-        app.logger.debug('this is a DEBUG message')
-        app.logger.info('this is an INFO message')
-        app.logger.warning('this is a WARNING message')
-        app.logger.error('this is an ERROR message')
-        app.logger.critical('this is a CRITICAL message')
+        flaskapp.logger.debug('this is a DEBUG message')
+        flaskapp.logger.info('this is an INFO message')
+        flaskapp.logger.warning('this is a WARNING message')
+        flaskapp.logger.error('this is an ERROR message')
+        flaskapp.logger.critical('this is a CRITICAL message')
         # flash('Got booking for user name={}, mail={}, startDate={}, endDate={}'.format(
         #     form.name.data, form.mail.data, form.startDate.data, form.endDate.data))
         # Register this booking in database
