@@ -2,6 +2,7 @@
 # if __name__ == "classes.mongodb": from . import config
 # else: import config
 from pymongo import MongoClient
+import pymongo
 
 class MongoDb:
     def __init__(self, mongoDb, database, collection):
@@ -17,7 +18,7 @@ class MongoDb:
         self.collection.insert_one(record)  
 
     def get(self, filter):
-        return self.collection.find(filter)
+        return self.collection.find(filter).sort('startDate', pymongo.ASCENDING)
 
 # Used for testing
 # mongo = MongoDb()

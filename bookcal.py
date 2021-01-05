@@ -2,7 +2,7 @@ from flask import Flask
 from flask import render_template, request, flash, redirect
 from config import Config
 from forms import LoginForm  # Temporary for testing form with Bootstrap
-from booking import BookingForm
+from booking import BookingForm, Booking
 from mongodb import MongoDb
 from datetime import datetime
 import logging
@@ -11,10 +11,10 @@ flaskapp = Flask(__name__)
 flaskapp.config.from_object(Config)
 mongo = MongoDb(flaskapp.config['MONGO_DB'], flaskapp.config['DATABASE'], flaskapp.config['COLLECTION'])
 
-if __name__ != '__main__':
-    gunicorn_logger = logging.getLogger('gunicorn.error')
-    flaskapp.logger.handlers = gunicorn_logger.handlers
-    flaskapp.logger.setLevel(gunicorn_logger.level)
+# if __name__ != '__main__':
+#     gunicorn_logger = logging.getLogger('gunicorn.error')
+#     flaskapp.logger.handlers = gunicorn_logger.handlers
+#     flaskapp.logger.setLevel(gunicorn_logger.level)
 
 @flaskapp.route('/', methods=['GET', 'POST'])
 def index():
@@ -58,6 +58,14 @@ def index():
             print('phone Error', error)
 
     return render_template('index.html', form=form, bookedDays=bookedDays)
+
+@flaskapp.route('/bookinglist')
+def bookinglist():
+    bookingList = []
+    for bookingRecord in mongo.get({'roomName': 'Elodie'}):
+        booking = Booking(bookingRecord['startDate'], bookingRecord['endDate'], bookingRecord['roomName'], bookingRecord['customerName'], bookingRecord['customerMail'], bookingRecord['customerPhone'])
+        bookingList += [booking]
+    return render_template('bookinglist.html', bookingList=bookingList)
 
 @flaskapp.route('/test', methods=['GET', 'POST'])
 def test():

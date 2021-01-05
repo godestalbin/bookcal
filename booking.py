@@ -10,3 +10,12 @@ class BookingForm(FlaskForm):
     mail = StringField('Mail', validators=[DataRequired(message='Un mail est requis'), Length(min=10, max=50, message='Mail trop court/long')]) #  Cannot get the regexp working: , Regexp('^[A-Z0-9+_.-]+@[A-Z0-9.-]+$', message='Format mail incorrect')
     phone = StringField('Phone', validators=[DataRequired(message='Un téléphone est requis'), Length(min=8, max=12, message='8 à 10 chiffres'), Regexp('[+]?\s?\d*', message='Format téléphone incorrect')])  # Optional +, optional space, repetition of numbers
     submit = SubmitField('Confirmer la réservation')
+
+class Booking:
+    def __init__(self, startDate, endDate, room, name, mail, phone):
+        self.startDate = startDate
+        self.endDate = endDate
+        self.room = room
+        self.name = name
+        self.mail = mail
+        self.phone = phone
