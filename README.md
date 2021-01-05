@@ -12,6 +12,7 @@ Status on 2020-01-03
 * Allow to select a date range for the preregistration
 * Provide basic controls on the data keyed in
 * Post the form and register the data in a MongoDb
+* Send a SMS (Free mobile gateway)
 
 ## Next features
 * Allow to manage more room, currently we have only one hardcoded room

@@ -5,7 +5,9 @@ from forms import LoginForm  # Temporary for testing form with Bootstrap
 from booking import BookingForm, Booking
 from mongodb import MongoDb
 from datetime import datetime
-import logging
+from sendsms import SendSms
+# import logging
+
 
 flaskapp = Flask(__name__)
 flaskapp.config.from_object(Config)
@@ -25,18 +27,16 @@ def index():
         # [['2021-01-10', '2021-01-20']]
     # print(bookedDays)
     form = BookingForm()
-    print(form.startDate, form.endDate, form.name, form.mail, form.phone)
     if form.validate_on_submit():
-        print('Form validated')
-        flaskapp.logger.debug('this is a DEBUG message')
-        flaskapp.logger.info('this is an INFO message')
-        flaskapp.logger.warning('this is a WARNING message')
-        flaskapp.logger.error('this is an ERROR message')
-        flaskapp.logger.critical('this is a CRITICAL message')
+        # print('Form validated')
+        # flaskapp.logger.debug('this is a DEBUG message')
+        # flaskapp.logger.info('this is an INFO message')
+        # flaskapp.logger.warning('this is a WARNING message')
+        # flaskapp.logger.error('this is an ERROR message')
+        # flaskapp.logger.critical('this is a CRITICAL message')
         # flash('Got booking for user name={}, mail={}, startDate={}, endDate={}'.format(
         #     form.name.data, form.mail.data, form.startDate.data, form.endDate.data))
         # Register this booking in database
-        print(datetime.strptime(form.startDate.data, '%Y-%m-%d'), datetime.strptime(form.endDate.data, '%Y-%m-%d'))
         mongo.add({
             'roomName': 'Elodie',
             'startDate': datetime.strptime(form.startDate.data, '%Y-%m-%d'), # datetime(form.startDate.data),
@@ -45,6 +45,13 @@ def index():
             'customerMail': form.mail.data,
             'customerPhone': form.phone.data
         })
+        # Send confirmation SMS to us
+        msg = 'Réservation du ' + form.startDate.data[0:12] + ' au ' + form.endDate.data[0:12] + '\r\n' + \
+        'Nom: ' + form.name.data + '\r\n' \
+        'Phone: ' + form.phone.data + '\r\n' \
+        'Mail: ' + form.mail.data + '\r\n'
+        sendSms = SendSms()
+        sendSms.sendMessage(msg)
     else:
         for error in form.startDate.errors:
             print('startdate Error', error)
