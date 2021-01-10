@@ -1,16 +1,19 @@
+from config import Config
 import smtplib, ssl
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
-sender_email = "godestalbindev@gmail.com"
+config = Config()
+sender_email = config.SENDER_EMAIL
 receiver_email = "godestalbin@gmail.com"
-password = 'xE8zkWEIsrk~dppG]s|AvbGJ'
+password = config.GMAIL_PASSWORD
+print(sender_email, password)
 
 message = MIMEMultipart("alternative")
 message["Subject"] = "Gîte La Lande - Confirmation de réservation"
 message["From"] = 'Réservation La Lande <lalandegite@gmail.com>'
 message["To"] = receiver_email
-message["Reply-to"] = 'lalandegite@gmail.com'
+message["Reply-to"] = config.REPLY_TO_EMAIL
 
 # Create the plain-text and HTML version of your message
 text = """\

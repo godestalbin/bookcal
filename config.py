@@ -20,6 +20,9 @@ class Config(object):
         self.DATABASE = Config.accessSecret(self, self.GCLOUD_PROJECT_ID, 'DATABASE')
         self.COLLECTION = Config.accessSecret(self, self.GCLOUD_PROJECT_ID, 'COLLECTION')
         self.FREE_MOBILE_SMS_GATEWAY = json.loads(Config.accessSecret(self, self.GCLOUD_PROJECT_ID, 'FREE_MOBILE_SMS_GATEWAY'))
+        self.GMAIL_PASSWORD = Config.accessSecret(self, self.GCLOUD_PROJECT_ID, 'GMAIL_PASSWORD')
+        self.SENDER_EMAIL = Config.accessSecret(self, self.GCLOUD_PROJECT_ID, 'SENDER_EMAIL')
+        self.REPLY_TO_EMAIL = Config.accessSecret(self, self.GCLOUD_PROJECT_ID, 'REPLY_TO_EMAIL')
 
     def accessSecret(self, project_id, secret_id, version='latest'):
         client = secretmanager.SecretManagerServiceClient()
