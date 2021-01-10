@@ -19,7 +19,7 @@ class Config(object):
         self.MONGO_DB = Config.accessSecret(self, self.GCLOUD_PROJECT_ID, 'MONGO_DB')
         self.DATABASE = Config.accessSecret(self, self.GCLOUD_PROJECT_ID, 'DATABASE')
         self.COLLECTION = Config.accessSecret(self, self.GCLOUD_PROJECT_ID, 'COLLECTION')
-        self.FREE_MOBILE_SMS_GATEWAY = Config.accessSecret(self, self.GCLOUD_PROJECT_ID, 'FREE_MOBILE_SMS_GATEWAY')
+        self.FREE_MOBILE_SMS_GATEWAY = [Config.accessSecret(self, self.GCLOUD_PROJECT_ID, 'FREE_MOBILE_SMS_GATEWAY')]
 
     def accessSecret(self, project_id, secret_id, version='latest'):
         client = secretmanager.SecretManagerServiceClient()
