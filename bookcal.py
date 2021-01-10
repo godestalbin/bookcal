@@ -11,7 +11,6 @@ from sendsms import SendSms
 
 flaskapp = Flask(__name__)
 config = Config()
-print(config.MONGO_DB)
 flaskapp.config.from_object(config)
 mongo = MongoDb(flaskapp.config['MONGO_DB'], flaskapp.config['DATABASE'], flaskapp.config['COLLECTION'])
 
