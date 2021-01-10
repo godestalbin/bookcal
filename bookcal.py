@@ -10,7 +10,9 @@ from sendsms import SendSms
 
 
 flaskapp = Flask(__name__)
-flaskapp.config.from_object(Config)
+config = Config()
+print(config.MONGO_DB)
+flaskapp.config.from_object(config)
 mongo = MongoDb(flaskapp.config['MONGO_DB'], flaskapp.config['DATABASE'], flaskapp.config['COLLECTION'])
 
 # if __name__ != '__main__':
