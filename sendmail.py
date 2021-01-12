@@ -3,11 +3,13 @@ import smtplib, ssl
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
+class SendMail:
+  def __init__(self, customerMail):
+
 config = Config()
 sender_email = config.SENDER_EMAIL
 receiver_email = "godestalbin@gmail.com"
 password = config.GMAIL_PASSWORD
-print(sender_email, password)
 
 message = MIMEMultipart("alternative")
 message["Subject"] = "Gîte La Lande - Confirmation de réservation"

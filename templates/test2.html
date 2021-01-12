@@ -5,23 +5,114 @@
   <meta charset="utf-8">
 
   <title>Booking calendar</title>
+  <script src="https://cdn.jsdelivr.net/npm/litepicker/dist/js/main.js"></script>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+
+  <style>
+    .themed-grid-col {
+      padding-top: .75rem;
+      padding-bottom: .75rem;
+      background-color: rgba(86, 61, 124, .15);
+      border: 1px solid rgba(86, 61, 124, .2);
+    }
+
+
+    .row-color {
+      background-color: linen;
+      border: 5px solid rgb(209, 208, 208);
+    }
+    .col-color {
+      background-color: linen;
+      border: 5px solid gray;
+    }
+    .column1 {
+      float: left;
+      height: 50px;
+      width:  100px;
+    }
+    .column2 {
+      float: left;
+    }
+    input {
+      display:block;
+    }
+
+    .litepickerdiv {
+      height: 260px;
+    }
+
+    /* .parent{
+      width: min-content;
+    } */
+  </style>
 </head>
 
 <body>
-    <div class="container">
-        <h1>Test page</h1>
+  <h1>Chambre tante Elodie</h1>
 
-        <form action="/action_page.php">
-            <label for="fname">First name:</label><br>
-            <input type="text" id="fname" name="fname" value="John"><br>
-            <label for="lname">Last name:</label><br>
-            <input type="text" id="lname" name="lname" value="Doe"><br><br>
-            <input type="submit" value="Submit">
-          </form> 
-          
+  <form action="" method="post" class="row g-3 needs-validation" novalidate>
+      <div class="col-md-6 themed-grid-col">
+          <img src="../static/images/Room1.jpg" class="rounded mx-auto d-block" width="500">
+      </div>
+      <div class="col-md-6 themed-grid-col litepickerdiv">
+          <div id="litepicker""></div>
+      </div>
+
+      <div class="col-md-6 themed-grid-col">
+        <input type="text">
+        <input type="text">
+      </div>
+      <div class="col-md-6 themed-grid-col">
+        <label for="male">Male</label>
+          <input type="text">
+
+          <label for="male">Male</label>
+          <input type="text">
+
+          <label for="male">Male</label>
+          <input type="text">
+
+      </div>
+
+      <div class="col-md-6 themed-grid-col">
+      </div>
+      <div class="col-6 themed-grid-col">
+          <button type="submit" class="btn btn-primary">Confirmer</button>
+      </div>
+  </form>
+
+</div>
+
+
+
+  <!-- <div class="row-color">
+    <div class="row-color column1">
+      <h2>First Div </h2>
     </div>
+    <div class="row-color column1">
+      <h2> Second Div</h2>
+      <input type="text">
+    </div>
+  </div>
 
+  <div class="row-color">
+    <div class="column1"></div>
+    <div class="column2" id="litepicker">
+      <!-- <input type="text" id="litepicker" name="fname"> -->
+    </div>
+  </div> -->
 
+  <script>
+    var picker = new Litepicker({ element: document.getElementById('litepicker') });
+    picker.show();
+    // console.log(document.getElementsByClassName("litepicker").style.height)
+    // document.getElementById('litePickerContainer').style.height = "300px";
+    // console.log(document.getElementById("litePickerContainer").style.height)
+    // window.onresize = (console.log("resize")
+    // window.addEventListener('resize', console.log("resize"));
+    window.onresize = function(event) {
+      picker.show();;
+    };
+  </script>
 </body>
 </html>
