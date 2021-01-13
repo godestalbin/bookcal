@@ -19,14 +19,13 @@ mongo = MongoDb(flaskapp.config['MONGO_DB'], flaskapp.config['DATABASE'], flaska
 #     flaskapp.logger.handlers = gunicorn_logger.handlers
 #     flaskapp.logger.setLevel(gunicorn_logger.level)
 
-@flaskapp.route('/', methods=['GET', 'POST'])
-def index():
+def getBookedDays():
     bookedDays = []
     for booking in mongo.get({'roomName': 'Elodie'}):
         bookedDays += [[booking['startDate'].strftime('%Y-%m-%d'),booking['endDate'].strftime('%Y-%m-%d')]]
-        # print(booking['startDate'], booking['endDate'])
-        # [['2021-01-10', '2021-01-20']]
-    # print(bookedDays)
+    return bookedDays
+
+def getBookingForm():
     form = BookingForm()
     if form.validate_on_submit():
         # print('Form validated')
@@ -46,13 +45,14 @@ def index():
             'customerMail': form.mail.data,
             'customerPhone': form.phone.data
         })
-        # Send confirmation SMS to us
-        msg = 'Réservation du ' + form.startDate.data[0:12] + ' au ' + form.endDate.data[0:12] + '\r\n' + \
-        'Nom: ' + form.name.data + '\r\n' \
-        'Phone: ' + form.phone.data + '\r\n' \
-        'Mail: ' + form.mail.data + '\r\n'
-        sendSms = SendSms()
-        sendSms.sendMessage(msg)
+        if flaskapp.config['OS_NAME'] != 'nt':  # Send SMS message only on Linux
+            # Send confirmation SMS to us
+            msg = 'Réservation du ' + form.startDate.data[0:12] + ' au ' + form.endDate.data[0:12] + '\r\n' + \
+            'Nom: ' + form.name.data + '\r\n' \
+            'Phone: ' + form.phone.data + '\r\n' \
+            'Mail: ' + form.mail.data + '\r\n'
+            sendSms = SendSms()
+            sendSms.sendMessage(msg)
     else:
         for error in form.startDate.errors:
             print('startdate Error', error)
@@ -65,7 +65,20 @@ def index():
         for error in form.phone.errors:
             print('phone Error', error)
 
+
+    return form
+
+@flaskapp.route('/', methods=['GET', 'POST'])
+def index():
+    bookedDays = getBookedDays()
+    form = getBookingForm()
     return render_template('index.html', form=form, bookedDays=bookedDays)
+
+@flaskapp.route('/mobile', methods=['GET', 'POST'])
+def mobile():
+    bookedDays = getBookedDays()
+    form = getBookingForm()
+    return render_template('mobile.html', form=form, bookedDays=bookedDays)
 
 @flaskapp.route('/bookinglist')
 def bookinglist():

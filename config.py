@@ -16,13 +16,24 @@ class Config(object):
     # https://mobile.free.fr/account/mes-options to get your API key
 
     def __init__(self):
-        self.MONGO_DB = Config.accessSecret(self, self.GCLOUD_PROJECT_ID, 'MONGO_DB')
-        self.DATABASE = Config.accessSecret(self, self.GCLOUD_PROJECT_ID, 'DATABASE')
-        self.COLLECTION = Config.accessSecret(self, self.GCLOUD_PROJECT_ID, 'COLLECTION')
-        self.FREE_MOBILE_SMS_GATEWAY = json.loads(Config.accessSecret(self, self.GCLOUD_PROJECT_ID, 'FREE_MOBILE_SMS_GATEWAY'))
-        self.GMAIL_PASSWORD = Config.accessSecret(self, self.GCLOUD_PROJECT_ID, 'GMAIL_PASSWORD')
-        self.SENDER_EMAIL = Config.accessSecret(self, self.GCLOUD_PROJECT_ID, 'SENDER_EMAIL')
-        self.REPLY_TO_EMAIL = Config.accessSecret(self, self.GCLOUD_PROJECT_ID, 'REPLY_TO_EMAIL')
+        self.OS_NAME = os.name  # nt for Windows, posix for Linux
+        if self.OS_NAME == 'nt':  # Windows = local dev env to avoid generating cost on Google secret manager
+            from private.localconfig import LocalConfig
+            self.MONGO_DB = LocalConfig.MONGO_DB
+            self.DATABASE = LocalConfig.DATABASE
+            self.COLLECTION = LocalConfig.COLLECTION
+            self.FREE_MOBILE_SMS_GATEWAY = LocalConfig.FREE_MOBILE_SMS_GATEWAY
+            self.GMAIL_PASSWORD = LocalConfig.GMAIL_PASSWORD
+            self.SENDER_EMAIL = LocalConfig.SENDER_EMAIL
+            self.REPLY_TO_EMAIL = LocalConfig.REPLY_TO_EMAIL
+        else:
+            self.MONGO_DB = Config.accessSecret(self, self.GCLOUD_PROJECT_ID, 'MONGO_DB')
+            self.DATABASE = Config.accessSecret(self, self.GCLOUD_PROJECT_ID, 'DATABASE')
+            self.COLLECTION = Config.accessSecret(self, self.GCLOUD_PROJECT_ID, 'COLLECTION')
+            self.FREE_MOBILE_SMS_GATEWAY = json.loads(Config.accessSecret(self, self.GCLOUD_PROJECT_ID, 'FREE_MOBILE_SMS_GATEWAY'))
+            self.GMAIL_PASSWORD = Config.accessSecret(self, self.GCLOUD_PROJECT_ID, 'GMAIL_PASSWORD')
+            self.SENDER_EMAIL = Config.accessSecret(self, self.GCLOUD_PROJECT_ID, 'SENDER_EMAIL')
+            self.REPLY_TO_EMAIL = Config.accessSecret(self, self.GCLOUD_PROJECT_ID, 'REPLY_TO_EMAIL')
 
     def accessSecret(self, project_id, secret_id, version='latest'):
         client = secretmanager.SecretManagerServiceClient()
