@@ -72,6 +72,9 @@ def getBookingForm():
 def index():
     bookedDays = getBookedDays()
     form = getBookingForm()
+    if form.validate_on_submit():
+        booking = Booking(form.startDate.data[0:12], form.endDate.data[0:12], "Room to manage later", form.name.data, form.mail.data, form.phone.data)
+        return render_template('confirmation.html', booking=booking)
     return render_template('index.html', form=form, bookedDays=bookedDays)
 
 @flaskapp.route('/mobile', methods=['GET', 'POST'])
@@ -79,6 +82,12 @@ def mobile():
     bookedDays = getBookedDays()
     form = getBookingForm()
     return render_template('mobile.html', form=form, bookedDays=bookedDays)
+
+@flaskapp.route('/confirmation')
+def confirmation():
+    bookedDays = getBookedDays()
+    form = getBookingForm()
+    return render_template('confirmation.html', form=form, bookedDays=bookedDays)
 
 @flaskapp.route('/bookinglist')
 def bookinglist():
