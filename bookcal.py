@@ -75,6 +75,7 @@ def index():
     if form.validate_on_submit():
         booking = Booking(form.startDate.data[0:12], form.endDate.data[0:12], "Room to manage later", form.name.data, form.mail.data, form.phone.data)
         return render_template('confirmation.html', booking=booking)
+    print(f'index bookedDays={bookedDays}')
     return render_template('index.html', form=form, bookedDays=bookedDays)
 
 @flaskapp.route('/mobile', methods=['GET', 'POST'])

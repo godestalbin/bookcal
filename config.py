@@ -1,6 +1,7 @@
 import os
 import json
-from google.cloud import secretmanager
+if os.name != 'nt':
+    from google.cloud import secretmanager
 
 class Config(object):
     # SECRET_KEY = os.environ.get('SECRET_KEY') or 'you-will-never-guess'
