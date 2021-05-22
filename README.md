@@ -16,7 +16,7 @@ Status on 2020-01-11
 * Implemented storage of all keys in Google secret manager
 
 ## Currently working on
-* Dedicated page for mobile
+* Implement booking form for more than one room
 
 ## Next features
 * Allow to manage more room, currently we have only one hardcoded room

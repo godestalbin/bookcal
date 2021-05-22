@@ -13,15 +13,16 @@ flaskapp = Flask(__name__)
 config = Config()
 flaskapp.config.from_object(config)
 mongo = MongoDb(flaskapp.config['MONGO_DB'], flaskapp.config['DATABASE'], flaskapp.config['COLLECTION'])
+mongoRooms = MongoDb(flaskapp.config['MONGO_DB'], flaskapp.config['DATABASE'], 'rooms')
 
 # if __name__ != '__main__':
 #     gunicorn_logger = logging.getLogger('gunicorn.error')
 #     flaskapp.logger.handlers = gunicorn_logger.handlers
 #     flaskapp.logger.setLevel(gunicorn_logger.level)
 
-def getBookedDays():
+def getBookedDays(roomName):
     bookedDays = []
-    for booking in mongo.get({'roomName': 'Elodie'}):
+    for booking in mongo.get({'roomName': roomName}):
         bookedDays += [[booking['startDate'].strftime('%Y-%m-%d'),booking['endDate'].strftime('%Y-%m-%d')]]
     return bookedDays
 
@@ -70,6 +71,44 @@ def getBookingForm():
 
 @flaskapp.route('/', methods=['GET', 'POST'])
 def index():
+    roomList = []
+    for room in mongoRooms.getAll():
+        roomList += [room['name']]
+    bookingList = []
+    for room in roomList:
+        # booking = Booking(roomId=room, lockDays = mongo.getBookedDays(room))
+        booking = Booking(roomId=room, name=room[0:3], mail=room[0:3]+'@gmail.com', phone='0781828688', lockDays = mongo.getBookedDays(room))
+        bookingList += [booking]
+
+    if request.method == "POST":
+        print('Form was posted')
+        print(request.form)
+        # Retrieve the booking by roomId
+        for booking in bookingList:
+            if booking.roomId == request.form["roomId"]: break
+        booking.name = request.form["name"]
+        booking.mail = request.form["mail"]
+        booking.phone = request.form["phone"]
+        booking.startDate = request.form["stayDate"]  # Validate will assign startDate/endDate using it
+        booking.yScroll = request.form["yScroll"]  # To keep the scroll position
+        if booking.validate():
+            print(f'Adding to Mongo roomId={booking.roomId} {booking}')
+            mongo.add({
+                'roomName': booking.roomId,
+                'startDate': datetime.strptime(booking.startDate, '%Y-%m-%d'),
+                'endDate': datetime.strptime(booking.endDate, '%Y-%m-%d'),
+                'customerName': booking.name,
+                'customerMail': booking.mail,
+                'customerPhone': booking.phone
+            })
+            return render_template('confirm.html', booking=booking)
+        else:
+            print(booking.phone, booking.startDate, booking.endDate)
+            return render_template('calendar.html', bookingList=bookingList)
+    else: print('Not a post')
+    return render_template('calendar.html', bookingList=bookingList)
+
+def index_old():
     bookedDays = getBookedDays()
     form = getBookingForm()
     if form.validate_on_submit():

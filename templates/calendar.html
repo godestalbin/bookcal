@@ -1,0 +1,115 @@
+<!doctype html>
+
+<head>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <!-- Litepicker CSS and script -->
+    <script src="https://cdn.jsdelivr.net/npm/litepicker/dist/litepicker.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/litepicker/dist/css/litepicker.css"/>
+    <!-- Litepicker customized CSS -->
+    <link rel="stylesheet" href="/static/styles/litepicker.css">
+    <link rel="stylesheet" href="/static/styles/astrodivider.css">
+</head>
+
+<body>
+    {% for booking in bookingList %}
+        <div class="container">
+            <form class="row g-3 needs-validation" action="/" method="post">
+                <h2 id="title{{booking.roomId}}">Réservation pour la chambre {{booking.roomId}}</h2>
+                <input type="hidden" id="roomId" name="roomId" value={{booking.roomId}}>
+                <input type="hidden" id="yScroll{{booking.roomId}}" name="yScroll" value="{{booking.yScroll}}">
+
+                <div class="col-md-12">
+                    <label class="form-label">Prénom, nom de famille</label>
+                    <input type="text" class="form-control {{booking.nameValid}}" name="name" required value={{booking.name}}>
+                    <div class="invalid-feedback">
+                        Veuillez remplir votre prénom et nom
+                    </div>
+                </div>
+    
+                <div class="col-md-6">
+                    <input type="text" class="form-control {{booking.startDateValid}}" style="margin-left: -12px; border: 0pt; background-color: white;" value="Dates de séjour souhaitées" readonly>
+                    <input type="text" id="{{booking.roomId}}" class="form-control {{booking.startDateValid}}" name="stayDate"  style="display:none;">
+                    <div class="invalid-feedback">
+                        Veuillez choisir les dates de votre séjour
+                    </div>                    
+                </div>
+    
+                <div class="col-md-12">
+                    <label class="form-label">Mail</label>
+                    <input type="text" class="form-control {{booking.mailValid}}" name="mail" required value={{booking.mail}}>
+                    <div class="invalid-feedback">
+                        Veuillez saisir un mail valide pour recevoir une confimation
+                    </div>
+                </div>
+    
+                <div class="col-md-12">
+                    <label class="form-label">Téléphone</label>
+                    <input type="text" class="form-control {{booking.phoneValid}}" name="phone" required value={{booking.phone}}>
+                    <div class="invalid-feedback">
+                        Veuillez saisir un numéro de téléphone (8 chiffres ou no etranger avec + code pays)
+                    </div>
+                </div>
+    
+                <div class="col-12">
+                    <button id="postButton{{booking.roomId}}" class="btn btn-primary" type="submit">Submit form</button>
+                </div>
+
+    
+            </form>
+            <div class="astrodivider"><div class="astrodividermask"></div><span><i>&#10038;</i></span></div>
+        </div>
+    
+        <script>
+            const {{booking.roomId}} = new Litepicker({ 
+                element: document.getElementById('{{booking.roomId}}'),
+                inlineMode: true,
+                singleMode: false,
+                numberOfColumns: 2,
+                numberOfMonths: 2,
+                switchingMonths: 1,
+                selectForward: true,
+                lockDays: {{booking.lockDays|safe}},
+                disallowLockDaysInRange: true,
+                lockDaysInclusivity: "[)",
+                // lockDaysFilter: (date1, date2, pickedDates) => {
+                //     console.log(date1);
+                //     console.log(date2);
+                //     console.log(pickedDates);
+                //     return false;
+                // },
+                setup: (picker) => {
+                    picker.on('before:click', (target) => {
+                        picker.setOptions({lockDaysInclusivity: "()"});
+                    });
+                    picker.on('selected', (date1, date2) => {
+                        if (date2 != null) {
+                            picker.setOptions({lockDaysInclusivity: "[)"});
+                        }
+                    });
+                    picker.on('error:range', () => {
+                        picker.setOptions({lockDaysInclusivity: "[)"});
+                    });
+                },
+                // setup: (picker) => {
+                // },
+                tooltipNumber: (totalDays) => {
+                    return totalDays - 1;
+                },
+                tooltipText: {"one":"nuit","other":"nuits"},
+                startDate: "{{booking.startDate|safe}}",
+                endDate: "{{booking.endDate|safe}}" 
+            });
+
+            // Register current scroll position before post
+            document.getElementById("postButton{{booking.roomId}}").addEventListener("click", storeYScroll);
+            function storeYScroll(){
+                document.getElementById("yScroll{{booking.roomId}}").value = window.pageYOffset;
+            }
+            // Restore previous scroll position
+            window.onload = window.scrollTo(0, parseInt(document.getElementById("yScroll{{booking.roomId}}").value));
+        </script>
+    {% endfor %}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+</body>
+</html>

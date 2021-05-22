@@ -1,0 +1,8 @@
+:root {
+    --litepicker-is-locked-color: #c3a8d0 !important;
+  }
+
+.is-locked {
+    background-color: #fbf2f4
+}
+
