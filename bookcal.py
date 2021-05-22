@@ -76,8 +76,8 @@ def index():
         roomList += [room['name']]
     bookingList = []
     for room in roomList:
-        # booking = Booking(roomId=room, lockDays = mongo.getBookedDays(room))
-        booking = Booking(roomId=room, name=room[0:3], mail=room[0:3]+'@gmail.com', phone='0781828688', lockDays = mongo.getBookedDays(room))
+        booking = Booking(roomId=room, lockDays = mongo.getBookedDays(room))
+        # booking = Booking(roomId=room, name=room[0:3], mail=room[0:3]+'@gmail.com', phone='0781828688', lockDays = mongo.getBookedDays(room))
         bookingList += [booking]
 
     if request.method == "POST":
