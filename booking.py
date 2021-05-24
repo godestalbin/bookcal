@@ -40,24 +40,16 @@ class Booking:
     startDateValid : str = ''
     endDate : str = ''
     lockDays : list = ''
+    color : str = '#FF1234'
 
     def validate(self):
         if self.name == '': self.nameValid = 'is-invalid'
         else: self.nameValid = 'is-valid'
-        print(len(self.startDate))
         if len(self.startDate) != 23:  # We did not receive the dates of stay
             self.startDateValid = 'is-invalid'
         else:
             self.endDate = self.startDate[13:23]
             self.startDate = self.startDate[0:10]
-            # Need to control we have no lockDays inside the date selection
-            # for range in self.lockDays:
-            #     if datetime.strptime(range[0], '%Y-%m-%d') >= datetime.strptime(self.startDate, '%Y-%m-%d') and \
-            #         datetime.strptime(range[0], '%Y-%m-%d') <= datetime.strptime(self.endDate, '%Y-%m-%d') or \
-            #         datetime.strptime(range[1], '%Y-%m-%d') >= datetime.strptime(self.startDate, '%Y-%m-%d') and \
-            #         datetime.strptime(range[1], '%Y-%m-%d') <= datetime.strptime(self.endDate, '%Y-%m-%d'):
-            #         self.startDateValid = 'is-invalid'
-            #         return
             self.startDateValid = 'is-valid'
 
         # mail at least one @
@@ -66,15 +58,14 @@ class Booking:
 
         # phone must contains only +, digits, space
         # 6 digits or start with plus
-        print(self.phone)
         self.phone = self.phone.replace(' ', '')
         if bool(re.match('^[0-9+]+$', self.phone)): 
             self.phoneValid = 'is-valid'
         else: self.phoneValid = 'is-invalid'
 
         if self.nameValid == 'is-invalid' or self.mailValid == 'is-invalid' or self.phoneValid == 'is-invalid' or self.startDateValid == 'is-invalid':
-            print('validate=false')
+            # print('validate=false')
             return False
         else:
-            print('validate=true')
+            # print('validate=true')
             return True

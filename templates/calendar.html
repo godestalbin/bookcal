@@ -1,6 +1,8 @@
-<!doctype html>
+<!DOCTYPE  html>
+<html lang="fr">
 
 <head>
+    <meta charset="UTF-8">
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
     <!-- Litepicker CSS and script -->
@@ -72,12 +74,6 @@
                 lockDays: {{booking.lockDays|safe}},
                 disallowLockDaysInRange: true,
                 lockDaysInclusivity: "[)",
-                // lockDaysFilter: (date1, date2, pickedDates) => {
-                //     console.log(date1);
-                //     console.log(date2);
-                //     console.log(pickedDates);
-                //     return false;
-                // },
                 setup: (picker) => {
                     picker.on('before:click', (target) => {
                         picker.setOptions({lockDaysInclusivity: "()"});

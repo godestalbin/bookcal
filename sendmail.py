@@ -2,28 +2,33 @@ from config import Config
 import smtplib, ssl
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
-
-class SendMail:
-  def __init__(self, customerMail):
+from datetime import datetime
+import locale
 
 config = Config()
-sender_email = config.SENDER_EMAIL
-receiver_email = "godestalbin@gmail.com"
-password = config.GMAIL_PASSWORD
+locale.setlocale(locale.LC_ALL, "fr_FR")
 
-message = MIMEMultipart("alternative")
-message["Subject"] = "Gîte La Lande - Confirmation de réservation"
-message["From"] = 'Réservation La Lande <lalandegite@gmail.com>'
-message["To"] = receiver_email
-message["Reply-to"] = config.REPLY_TO_EMAIL
+class SendMail:
+  def __init__(self, booking):
 
-# Create the plain-text and HTML version of your message
-text = """\
-Hi,
-How are you?
-Real Python has many great tutorials:
-www.realpython.com"""
-html = """\
+
+    sender_email = config.SENDER_EMAIL
+    receiver_email = "godestalbin@gmail.com"
+    password = config.GMAIL_PASSWORD
+
+    message = MIMEMultipart("alternative")
+    message["Subject"] = "Gîte La Lande - Confirmation de réservation"
+    message["From"] = 'Gîte - La Lande <lalandegite@gmail.com>'
+    message["To"] = receiver_email
+    message["Reply-to"] = config.REPLY_TO_EMAIL
+
+    # Create the plain-text and HTML version of your message
+    text = """\
+    Hi,
+    How are you?
+    Real Python has many great tutorials:
+    www.realpython.com"""
+    html = """\
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
@@ -56,17 +61,40 @@ html = """\
             <tr>
               <td style="border-spacing: 0px; border-collapse: collapse; line-height: 24px; font-size: 16px; margin: 0;" align="left">
                 
-      <table class="s-5 w-100" border="0" cellpadding="0" cellspacing="0" style="width: 100%;">
+      <table class="s-3 w-100" border="0" cellpadding="0" cellspacing="0" style="width: 100%;">
   <tbody>
     <tr>
-      <td height="48" style="border-spacing: 0px; border-collapse: collapse; line-height: 48px; font-size: 48px; width: 100%; height: 48px; margin: 0;" align="left">
+      <td height="16" style="border-spacing: 0px; border-collapse: collapse; line-height: 16px; font-size: 16px; width: 100%; height: 16px; margin: 0;" align="left">
          
       </td>
     </tr>
   </tbody>
 </table>
 
-<table class="card " border="0" cellpadding="0" cellspacing="0" style="font-family: Helvetica, Arial, sans-serif; mso-table-lspace: 0pt; mso-table-rspace: 0pt; border-spacing: 0px; border-collapse: separate !important; border-radius: 4px; width: 100%; overflow: hidden; border: 1px solid #dee2e6;" bgcolor="#ffffff">
+<table class="alert alert-info . ." border="0" cellpadding="0" cellspacing="0" style="font-family: Helvetica, Arial, sans-serif; mso-table-lspace: 0pt; mso-table-rspace: 0pt; border-spacing: 0px; border-collapse: separate !important; width: 100%; border: 0;">
+  <tbody>
+    <tr>
+      <td style="border-spacing: 0px; border-collapse: collapse; line-height: 24px; font-size: 16px; border-radius: 4px; color: #062a30; margin: 0; padding: 12px 20px; border: 1px solid transparent;" align="left" bgcolor="#a7e9f4">
+        <div>
+        <h2 style="margin-top: 0; margin-bottom: 0; font-weight: 500; vertical-align: baseline; font-size: 32px; line-height: 38.4px;" align="left">La Lande - Confirmation de réservation</h2>
+      </div>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<table class="s-3 w-100" border="0" cellpadding="0" cellspacing="0" style="width: 100%;">
+  <tbody>
+    <tr>
+      <td height="16" style="border-spacing: 0px; border-collapse: collapse; line-height: 16px; font-size: 16px; width: 100%; height: 16px; margin: 0;" align="left">
+         
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
+
+      <table class="card ." border="0" cellpadding="0" cellspacing="0" style="font-family: Helvetica, Arial, sans-serif; mso-table-lspace: 0pt; mso-table-rspace: 0pt; border-spacing: 0px; border-collapse: separate !important; border-radius: 4px; width: 100%; overflow: hidden; border: 1px solid #dee2e6;" bgcolor="#ffffff">
   <tbody>
     <tr>
       <td style="border-spacing: 0px; border-collapse: collapse; line-height: 24px; font-size: 16px; width: 100%; margin: 0;" align="left">
@@ -76,42 +104,76 @@ html = """\
     <tr>
       <td style="border-spacing: 0px; border-collapse: collapse; line-height: 24px; font-size: 16px; width: 100%; margin: 0; padding: 20px;" align="left">
         <div>
-          <h1 style="margin-top: 0; margin-bottom: 0; font-weight: 500; vertical-align: baseline; font-size: 36px; line-height: 43.2px;" align="left">Gîte et chambres d'hôtes La Lande</h1>
-          <table class="alert alert-primary" border="0" cellpadding="0" cellspacing="0" style="font-family: Helvetica, Arial, sans-serif; mso-table-lspace: 0pt; mso-table-rspace: 0pt; border-spacing: 0px; border-collapse: separate !important; width: 100%; border: 0;">
+          <p class="." style="line-height: 24px; font-size: 16px; width: 100%; margin: 0;" align="left">Madame, Monsieur """ + booking.name + """</p>
+<table class="s-3 w-100" border="0" cellpadding="0" cellspacing="0" style="width: 100%;">
   <tbody>
     <tr>
-      <td style="border-spacing: 0px; border-collapse: collapse; line-height: 24px; font-size: 16px; border-radius: 4px; color: #003166; margin: 0; padding: 12px 20px; border: 1px solid transparent;" align="left" bgcolor="#cce5ff">
-        <div>
-  			Confirmation de réservation
-          </div>
+      <td height="16" style="border-spacing: 0px; border-collapse: collapse; line-height: 16px; font-size: 16px; width: 100%; height: 16px; margin: 0;" align="left">
+         
       </td>
     </tr>
   </tbody>
 </table>
 
-<table class="card" border="0" cellpadding="0" cellspacing="0" style="font-family: Helvetica, Arial, sans-serif; mso-table-lspace: 0pt; mso-table-rspace: 0pt; border-spacing: 0px; border-collapse: separate !important; border-radius: 4px; width: 100%; overflow: hidden; border: 1px solid #dee2e6;" bgcolor="#ffffff">
+
+          <p class="." style="line-height: 24px; font-size: 16px; width: 100%; margin: 0;" align="left">Nous avons bien reçu votre demande de réservation du """ + datetime.strptime(booking.startDate, '%Y-%m-%d').strftime('%A %d %B %Y') + """ au """ + datetime.strptime(booking.endDate, '%Y-%m-%d').strftime('%A %d %B %Y') + """ pour la chambre """ + booking.roomId + """ et nous vous en remercions.</p>
+<table class="s-3 w-100" border="0" cellpadding="0" cellspacing="0" style="width: 100%;">
   <tbody>
     <tr>
-      <td style="border-spacing: 0px; border-collapse: collapse; line-height: 24px; font-size: 16px; width: 100%; margin: 0;" align="left">
-        <div>
-  <table class="card-body" border="0" cellpadding="0" cellspacing="0" style="font-family: Helvetica, Arial, sans-serif; mso-table-lspace: 0pt; mso-table-rspace: 0pt; border-spacing: 0px; border-collapse: collapse; width: 100%;">
-  <tbody>
-    <tr>
-      <td style="border-spacing: 0px; border-collapse: collapse; line-height: 24px; font-size: 16px; width: 100%; margin: 0; padding: 20px;" align="left">
-        <div>
-    Nous avons bien reçu votre demande de réservation du mardi 13 octobre au jeudi 15 octobre.
-    Nous sommes à votre disposition pour tout renseignement complémentaire.
-  </div>
+      <td height="16" style="border-spacing: 0px; border-collapse: collapse; line-height: 16px; font-size: 16px; width: 100%; height: 16px; margin: 0;" align="left">
+         
       </td>
     </tr>
   </tbody>
 </table>
 
+
+          <p class="." style="line-height: 24px; font-size: 16px; width: 100%; margin: 0;" align="left">Pour toute question vous pouvez nous joindre au 07 81 58 82 58.</p>
+<table class="s-3 w-100" border="0" cellpadding="0" cellspacing="0" style="width: 100%;">
+  <tbody>
+    <tr>
+      <td height="16" style="border-spacing: 0px; border-collapse: collapse; line-height: 16px; font-size: 16px; width: 100%; height: 16px; margin: 0;" align="left">
+         
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
+          <p class="." style="line-height: 24px; font-size: 16px; width: 100%; margin: 0;" align="left">En espérant vous rencontrer bientôt à La Lande.</p>
+<table class="s-3 w-100" border="0" cellpadding="0" cellspacing="0" style="width: 100%;">
+  <tbody>
+    <tr>
+      <td height="16" style="border-spacing: 0px; border-collapse: collapse; line-height: 16px; font-size: 16px; width: 100%; height: 16px; margin: 0;" align="left">
+         
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
+          <p class="." style="line-height: 24px; font-size: 16px; width: 100%; margin: 0;" align="left">Très cordialement,<br>
+            Camilla et Guy Olivier de Saint Albin</p>
+<table class="s-3 w-100" border="0" cellpadding="0" cellspacing="0" style="width: 100%;">
+  <tbody>
+    <tr>
+      <td height="16" style="border-spacing: 0px; border-collapse: collapse; line-height: 16px; font-size: 16px; width: 100%; height: 16px; margin: 0;" align="left">
+         
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
+      <div class="hr " style="width: 100%; margin: 20px 0; border: 0;">
+  <table border="0" cellpadding="0" cellspacing="0" style="font-family: Helvetica, Arial, sans-serif; mso-table-lspace: 0pt; mso-table-rspace: 0pt; border-spacing: 0px; border-collapse: collapse; width: 100%;">
+    <tbody>
+      <tr>
+        <td style="border-spacing: 0px; border-collapse: collapse; line-height: 24px; font-size: 16px; border-top-width: 1px; border-top-color: #dddddd; border-top-style: solid; height: 1px; width: 100%; margin: 0;" align="left"></td>
+      </tr>
+    </tbody>
+  </table>
 </div>
-      </td>
-    </tr>
-  </tbody>
-</table>
 
         </div>
       </td>
@@ -124,10 +186,10 @@ html = """\
     </tr>
   </tbody>
 </table>
-<table class="s-5 w-100" border="0" cellpadding="0" cellspacing="0" style="width: 100%;">
+<table class="s-3 w-100" border="0" cellpadding="0" cellspacing="0" style="width: 100%;">
   <tbody>
     <tr>
-      <td height="48" style="border-spacing: 0px; border-collapse: collapse; line-height: 48px; font-size: 48px; width: 100%; height: 48px; margin: 0;" align="left">
+      <td height="16" style="border-spacing: 0px; border-collapse: collapse; line-height: 16px; font-size: 16px; width: 100%; height: 16px; margin: 0;" align="left">
          
       </td>
     </tr>
@@ -160,21 +222,21 @@ html = """\
 </body>
 </html>
 
-"""
+    """
 
-# Turn these into plain/html MIMEText objects
-part1 = MIMEText(text, "plain")
-part2 = MIMEText(html, "html")
+    # Turn these into plain/html MIMEText objects
+    part1 = MIMEText(text, "plain")
+    part2 = MIMEText(html, "html")
 
-# Add HTML/plain-text parts to MIMEMultipart message
-# The email client will try to render the last part first
-message.attach(part1)
-message.attach(part2)
+    # Add HTML/plain-text parts to MIMEMultipart message
+    # The email client will try to render the last part first
+    message.attach(part1)
+    message.attach(part2)
 
-# Create secure connection with server and send email
-context = ssl.create_default_context()
-with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
-    server.login(sender_email, password)
-    server.sendmail(
-        sender_email, receiver_email, message.as_string()
-    )
+    # Create secure connection with server and send email
+    context = ssl.create_default_context()
+    with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
+        server.login(sender_email, password)
+        server.sendmail(
+            sender_email, receiver_email, message.as_string()
+        )

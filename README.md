@@ -2,9 +2,13 @@
 
 ## Principle
 Allow potential customers to quickly indentify availabilies for a guest house and preregister the dates they intend to book.
-We consider it is a preregistration as, currently, we do not request to pay any no deposit.
+We consider it is a preregistration as currently, we do not request to pay any no deposit.
 
 ## Current features
+Status on 2020-05-23
+* Ported to the lastest release of Litepicker 2.0.11
+* Implemented registration for a list of rooms
+* Send a confirmation mai to the mail registered for booking
 Status on 2020-01-11
 * Display a booking calendar with a form to send preregistation
 * Show unavailable dates (guest house closing dates)

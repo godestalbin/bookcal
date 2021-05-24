@@ -6,6 +6,7 @@ from booking import BookingForm, Booking
 from mongodb import MongoDb
 from datetime import datetime
 from sendsms import SendSms
+from sendmail import SendMail
 # import logging
 
 
@@ -92,21 +93,32 @@ def index():
         booking.startDate = request.form["stayDate"]  # Validate will assign startDate/endDate using it
         booking.yScroll = request.form["yScroll"]  # To keep the scroll position
         if booking.validate():
-            print(f'Adding to Mongo roomId={booking.roomId} {booking}')
-            mongo.add({
-                'roomName': booking.roomId,
-                'startDate': datetime.strptime(booking.startDate, '%Y-%m-%d'),
-                'endDate': datetime.strptime(booking.endDate, '%Y-%m-%d'),
-                'customerName': booking.name,
-                'customerMail': booking.mail,
-                'customerPhone': booking.phone
-            })
+            registerNewBooking(booking)
             return render_template('confirm.html', booking=booking)
         else:
             print(booking.phone, booking.startDate, booking.endDate)
             return render_template('calendar.html', bookingList=bookingList)
     else: print('Not a post')
     return render_template('calendar.html', bookingList=bookingList)
+
+def registerNewBooking(booking):
+        mongo.add({
+            'roomName': booking.roomId,
+            'startDate': datetime.strptime(booking.startDate, '%Y-%m-%d'),
+            'endDate': datetime.strptime(booking.endDate, '%Y-%m-%d'),
+            'customerName': booking.name,
+            'customerMail': booking.mail,
+            'customerPhone': booking.phone
+        })
+        if flaskapp.config['OS_NAME'] != 'nt':  # Send SMS message only on Linux
+        # Send confirmation SMS to us
+            msg = 'Réservation du pour La Lande' + booking.startDate + ' au ' + booking.endDate + '\r\n' + \
+            'Nom: ' + booking.name + '\r\n' \
+            'Phone: ' + booking.phone + '\r\n' \
+            'Mail: ' + booking.mail + '\r\n'
+            sendSms = SendSms()
+            sendSms.sendMessage(msg)
+        sendMail = SendMail(booking)
 
 def index_old():
     bookedDays = getBookedDays()
@@ -132,10 +144,12 @@ def confirmation():
 @flaskapp.route('/bookinglist')
 def bookinglist():
     bookingList = []
-    for bookingRecord in mongo.get({'roomName': 'Elodie'}):
-        booking = Booking(bookingRecord['startDate'], bookingRecord['endDate'], bookingRecord['roomName'], bookingRecord['customerName'], bookingRecord['customerMail'], bookingRecord['customerPhone'])
+    roomColor = {'Elodie': '#9090E3', 'Léonie': '#7070E3', 'Mélodie': '#0A0AE3'}
+    for bookingRecord in mongo.get({}):  #{'roomName': 'Elodie'}
+        booking = Booking(roomId=bookingRecord['roomName'], startDate=bookingRecord['startDate'].strftime('%Y-%m-%d')+'T14:00:00', endDate=bookingRecord['endDate'].strftime('%Y-%m-%d')+'T10:00:00', name=bookingRecord['customerName'], mail=bookingRecord['customerMail'], phone=bookingRecord['customerPhone'], color=roomColor[bookingRecord['roomName']])
         bookingList += [booking]
-    return render_template('bookinglist.html', bookingList=bookingList)
+    # return render_template('bookinglist.html', bookingList=bookingList)
+    return render_template('bookingcalendar.html', bookingList=bookingList)
 
 @flaskapp.route('/test', methods=['GET', 'POST'])
 def test():
