@@ -6,7 +6,9 @@ from booking import BookingForm, Booking
 from mongodb import MongoDb
 from datetime import datetime
 from sendsms import SendSms
-# from sendmail import SendMail
+print('Before importing SendMail')
+from sendmail import SendMail
+print('After importing SendMail')
 # import logging
 
 

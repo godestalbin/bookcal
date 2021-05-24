@@ -4,6 +4,7 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from datetime import datetime
 import locale
+print('Completed SendMail import')
 
 config = Config()
 locale.setlocale(locale.LC_ALL, "fr_FR")
