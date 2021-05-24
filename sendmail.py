@@ -1,13 +1,13 @@
 from config import Config
 import smtplib, ssl
-# from email.mime.text import MIMEText
-# from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 from datetime import datetime
-import locale
+# import locale
 print('Completed SendMail import')
 
 config = Config()
-locale.setlocale(locale.LC_ALL, "fr_FR")
+# locale.setlocale(locale.LC_ALL, "fr_FR")
 
 class SendMail:
   def __init__(self, booking):
