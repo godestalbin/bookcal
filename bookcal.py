@@ -114,7 +114,7 @@ def registerNewBooking(booking):
         })
         if flaskapp.config['OS_NAME'] != 'nt':  # Send SMS message only on Linux
         # Send confirmation SMS to us
-            msg = 'Réservation du pour La Lande' + booking.startDate + ' au ' + booking.endDate + '\r\n' + \
+            msg = 'Réservation pour La Lande du ' + booking.startDate + ' au ' + booking.endDate + '\r\n' + \
             'Nom: ' + booking.name + '\r\n' \
             'Phone: ' + booking.phone + '\r\n' \
             'Mail: ' + booking.mail + '\r\n'
